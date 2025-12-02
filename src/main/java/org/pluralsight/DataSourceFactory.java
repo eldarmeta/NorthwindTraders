@@ -2,20 +2,22 @@ package org.pluralsight;
 
 import org.apache.commons.dbcp2.BasicDataSource;
 
+import javax.sql.DataSource;
+
 public class DataSourceFactory {
 
-    private static final BasicDataSource dataSource = new BasicDataSource();
+    public static DataSource getDataSource(String username, String password) {
 
-    static {
-        dataSource.setUrl("jdbc:mysql://localhost:3306/northwind");
-        dataSource.setUsername("root");
-        dataSource.setPassword("yearup24");
-        dataSource.setMinIdle(5);
-        dataSource.setMaxIdle(10);
-        dataSource.setMaxOpenPreparedStatements(100);
-    }
+        BasicDataSource ds = new BasicDataSource();
 
-    public static BasicDataSource getDataSource() {
-        return dataSource;
+        ds.setUrl("jdbc:mysql://localhost:3306/northwind");
+        ds.setUsername(username);
+        ds.setPassword(password);
+
+        ds.setMinIdle(5);
+        ds.setMaxIdle(10);
+        ds.setMaxOpenPreparedStatements(100);
+
+        return ds;
     }
 }
