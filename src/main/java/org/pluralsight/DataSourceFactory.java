@@ -6,18 +6,30 @@ import javax.sql.DataSource;
 
 public class DataSourceFactory {
 
-    public static DataSource getDataSource(String username, String password) {
+    private static BasicDataSource dataSource;
 
-        BasicDataSource ds = new BasicDataSource();
+    public static DataSource getDataSource(String[] args) {
 
-        ds.setUrl("jdbc:mysql://localhost:3306/northwind");
-        ds.setUsername(username);
-        ds.setPassword(password);
+        if (args.length < 3) {
+            throw new RuntimeException("You must pass 3 arguments: username password databasename");
+        }
 
-        ds.setMinIdle(5);
-        ds.setMaxIdle(10);
-        ds.setMaxOpenPreparedStatements(100);
+        String username = args[0];
+        String password = args[1];
+        String dbName   = args[2];
 
-        return ds;
+        if (dataSource == null) {
+
+            dataSource = new BasicDataSource();
+            dataSource.setUrl("jdbc:mysql://localhost:3306/" + dbName);
+            dataSource.setUsername(username);
+            dataSource.setPassword(password);
+
+            dataSource.setMinIdle(3);
+            dataSource.setMaxIdle(10);
+            dataSource.setMaxTotal(20);
+        }
+
+        return dataSource;
     }
 }
